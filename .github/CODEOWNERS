@@ -1,0 +1,12 @@
+# 默认由仓库负责人审核所有变更。
+* @weizheng9493
+
+# 工作流和治理规则需要负责人审核。
+/AGENTS.md @weizheng9493
+/CONTRIBUTING.md @weizheng9493
+/docs/ @weizheng9493
+/workflows/ @weizheng9493
+/.github/ @weizheng9493
+
+# Agent Skill 修改需要负责人审核。
+/hanglv-ai-pm-agent-skills/ @weizheng9493
