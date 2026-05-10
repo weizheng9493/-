@@ -2,13 +2,22 @@ name: Feishu Notify
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
+    tags: ['**']
+  create:
+  delete:
   issues:
     types: [opened, edited, closed, reopened]
   pull_request:
     types: [opened, reopened, ready_for_review, synchronize, closed]
   pull_request_review:
     types: [submitted]
+  issue_comment:
+    types: [created, edited, deleted]
+  pull_request_review_comment:
+    types: [created, edited, deleted]
+  discussion:
+    types: [created, edited, answered, category_changed, deleted, locked, unlocked]
   release:
     types: [published]
   workflow_dispatch:
@@ -48,11 +57,40 @@ jobs:
           }
 
           const payload = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
-          const item = payload.pull_request || payload.issue || payload.release || {};
-          const title = item.title || item.name || `${eventName} ${action}`;
-          const url = item.html_url || `https://github.com/${repo}`;
+          const item =
+            payload.pull_request ||
+            payload.issue ||
+            payload.release ||
+            payload.discussion ||
+            payload.comment ||
+            {};
+          const ref = payload.ref || payload.payload?.ref || '';
+          const commit = payload.head_commit || payload.commits?.[payload.commits.length - 1] || {};
+          const title =
+            item.title ||
+            item.name ||
+            commit.message ||
+            `${eventName} ${action}`.trim();
+          const url =
+            item.html_url ||
+            payload.compare ||
+            commit.url ||
+            `https://github.com/${repo}`;
           const number = item.number ? `#${item.number}` : '';
           const state = item.merged ? 'merged' : (item.state || '');
+          const eventSummary = (() => {
+            if (eventName === 'push') {
+              const commitCount = Array.isArray(payload.commits) ? payload.commits.length : 0;
+              return `${ref || 'push'} · ${commitCount} 个提交`;
+            }
+            if (eventName === 'create') {
+              return `create ${payload.ref_type || ''} ${payload.ref || ''}`.trim();
+            }
+            if (eventName === 'delete') {
+              return `delete ${payload.ref_type || ''} ${payload.ref || ''}`.trim();
+            }
+            return `${eventName} / ${action}`;
+          })();
 
           const reviewHints = [];
           if (payload.pull_request) {
@@ -60,6 +98,13 @@ jobs:
             reviewHints.push('- UI：确认 HTML 原型、Figma 链接、状态覆盖和视觉方向');
             reviewHints.push('- 前端：确认数据结构、实现方案、接口承接和风险');
             reviewHints.push('- QA：确认状态覆盖、校验脚本和阻塞项');
+          }
+          if (eventName === 'push') {
+            reviewHints.push('- 研发：确认提交内容、diff 范围、是否需要回归验证');
+            reviewHints.push('- 产品：确认本次改动是否符合 Issue / PRD 目标');
+          }
+          if (eventName === 'create' || eventName === 'delete') {
+            reviewHints.push('- 团队：确认分支或标签变更是否符合发布/协作预期');
           }
           if (payload.issue && !payload.pull_request) {
             reviewHints.push('- 产品：补充背景、目标、范围、验收标准和优先级');
@@ -77,10 +122,10 @@ jobs:
                 wide_screen_mode: true
               },
               header: {
-                template: payload.pull_request ? 'blue' : payload.release ? 'green' : 'turquoise',
+                template: payload.pull_request ? 'blue' : payload.release ? 'green' : eventName === 'push' ? 'purple' : 'turquoise',
                 title: {
                   tag: 'plain_text',
-                  content: `GitHub 更新：${eventName} / ${action}`
+                  content: `GitHub 更新：${eventSummary}`
                 }
               },
               elements: [
@@ -90,6 +135,7 @@ jobs:
                     tag: 'lark_md',
                     content:
                       `**仓库**：${repo}\n` +
+                      `**事件**：${eventSummary}\n` +
                       `**标题**：${number} ${title}\n` +
                       `**状态**：${state || '-'}\n` +
                       `**操作人**：${actor}\n` +
