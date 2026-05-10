@@ -1,5 +1,11 @@
 # UI 交付说明：舱位权益展示 Demo
 
+## 0. Figma 链接
+
+- HTML 原型 Capture：https://www.figma.com/design/loxVuPKMBrzo2EW0XLPChk
+
+说明：该文件由 HTML 原型通过 Figma MCP capture 生成，用于快速评审页面结构、状态和视觉方向。当前不是设计系统组件化稿。
+
 ## 1. 设计目标
 
 在不增加用户认知负担的前提下，让用户快速理解不同舱位的权益差异。

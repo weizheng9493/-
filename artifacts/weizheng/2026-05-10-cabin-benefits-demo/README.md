@@ -33,6 +33,12 @@
 | `scripts/validate-cabin-benefits.mjs` | 假数据校验脚本 |
 | `prototype/index.html` | 可交互 HTML 原型 |
 
+## Figma 链接
+
+- HTML 原型 Capture：https://www.figma.com/design/loxVuPKMBrzo2EW0XLPChk
+
+说明：这个 Figma 文件由 HTML 原型捕获生成，用于快速跑通 UI 协作和视觉评审流程。当前是 raw frames，不是组件化设计系统稿。
+
 ## 原型查看方式
 
 直接用浏览器打开：

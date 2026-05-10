@@ -15,6 +15,7 @@
 | 是否有不可选状态 | 通过 | 经济舱特价为不可选 |
 | 是否有校验脚本 | 通过 | `validate-cabin-benefits.mjs` |
 | 是否有可交互 UI 原型 | 通过 | `prototype/index.html` |
+| 是否已生成 Figma 链接 | 通过 | https://www.figma.com/design/loxVuPKMBrzo2EW0XLPChk |
 
 ## 3. 校验命令
 
@@ -27,6 +28,8 @@ node artifacts/weizheng/2026-05-10-cabin-benefits-demo/scripts/validate-cabin-be
 Demo 产物可以用于跑通 GitHub Issue → 产品 PRD → UI 交付 → 研发计划 → QA 验收 → PR 审核流程。
 
 HTML 原型已经补充，可用于更接近真实协作地评审 UI 状态和交互承接。
+
+Figma capture 已生成，可用于团队在 Figma 内做视觉评审；但当前为 raw frames，不代表最终设计系统组件稿。
 
 ## 5. 阻塞项
 
