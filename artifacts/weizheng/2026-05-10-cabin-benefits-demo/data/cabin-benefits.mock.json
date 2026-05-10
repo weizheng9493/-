@@ -1,0 +1,195 @@
+{
+  "flight": {
+    "flightNo": "CA1234",
+    "route": "北京首都 T3 - 上海虹桥 T2",
+    "departTime": "2026-05-12 08:30",
+    "arriveTime": "2026-05-12 10:45"
+  },
+  "cabins": [
+    {
+      "cabinId": "economy_standard",
+      "name": "经济舱标准",
+      "tag": "基础",
+      "price": 980,
+      "currency": "CNY",
+      "sortOrder": 1,
+      "selectable": true,
+      "benefits": [
+        {
+          "benefitId": "checked_baggage",
+          "name": "托运行李",
+          "summary": "20kg 免费托运",
+          "detail": "每位成人旅客可免费托运 20kg 行李。",
+          "level": "standard",
+          "available": true,
+          "highlight": true,
+          "source": "mock"
+        },
+        {
+          "benefitId": "change_refund",
+          "name": "退改签",
+          "summary": "按航司标准规则收取手续费",
+          "detail": "具体退改签费用以航司实际规则为准。",
+          "level": "basic",
+          "available": true,
+          "highlight": true,
+          "source": "mock"
+        },
+        {
+          "benefitId": "seat_selection",
+          "name": "选座",
+          "summary": "值机开放后可选座",
+          "detail": "可在值机开放后选择普通座位。",
+          "level": "basic",
+          "available": true,
+          "highlight": false,
+          "source": "mock"
+        }
+      ]
+    },
+    {
+      "cabinId": "economy_flex",
+      "name": "经济舱灵活",
+      "tag": "推荐",
+      "price": 1280,
+      "currency": "CNY",
+      "sortOrder": 2,
+      "selectable": true,
+      "benefits": [
+        {
+          "benefitId": "checked_baggage",
+          "name": "托运行李",
+          "summary": "25kg 免费托运",
+          "detail": "每位成人旅客可免费托运 25kg 行李。",
+          "level": "premium",
+          "available": true,
+          "highlight": true,
+          "source": "mock"
+        },
+        {
+          "benefitId": "change_refund",
+          "name": "退改签",
+          "summary": "改签手续费更低",
+          "detail": "航班起飞前改签手续费低于标准经济舱。",
+          "level": "premium",
+          "available": true,
+          "highlight": true,
+          "source": "mock"
+        },
+        {
+          "benefitId": "seat_selection",
+          "name": "选座",
+          "summary": "提前选择普通座位",
+          "detail": "购票后可提前选择普通座位。",
+          "level": "standard",
+          "available": true,
+          "highlight": true,
+          "source": "mock"
+        },
+        {
+          "benefitId": "priority_checkin",
+          "name": "优先值机",
+          "summary": "部分机场支持优先值机",
+          "detail": "以机场和航司实际服务为准。",
+          "level": "standard",
+          "available": true,
+          "highlight": false,
+          "source": "mock"
+        }
+      ]
+    },
+    {
+      "cabinId": "business_premium",
+      "name": "商务舱尊享",
+      "tag": "高权益",
+      "price": 3280,
+      "currency": "CNY",
+      "sortOrder": 3,
+      "selectable": true,
+      "benefits": [
+        {
+          "benefitId": "checked_baggage",
+          "name": "托运行李",
+          "summary": "40kg 免费托运",
+          "detail": "每位成人旅客可免费托运 40kg 行李。",
+          "level": "premium",
+          "available": true,
+          "highlight": true,
+          "source": "mock"
+        },
+        {
+          "benefitId": "lounge",
+          "name": "休息室",
+          "summary": "可使用商务休息室",
+          "detail": "以机场和航司实际开放情况为准。",
+          "level": "premium",
+          "available": true,
+          "highlight": true,
+          "source": "mock"
+        },
+        {
+          "benefitId": "priority_boarding",
+          "name": "优先登机",
+          "summary": "支持优先登机",
+          "detail": "登机时可使用优先通道。",
+          "level": "premium",
+          "available": true,
+          "highlight": true,
+          "source": "mock"
+        },
+        {
+          "benefitId": "meal",
+          "name": "餐食",
+          "summary": "商务舱餐食",
+          "detail": "餐食以航司实际供应为准。",
+          "level": "premium",
+          "available": true,
+          "highlight": false,
+          "source": "mock"
+        }
+      ]
+    },
+    {
+      "cabinId": "economy_discount",
+      "name": "经济舱特价",
+      "tag": "售罄",
+      "price": 720,
+      "currency": "CNY",
+      "sortOrder": 4,
+      "selectable": false,
+      "unavailableReason": "当前舱位余票不足",
+      "benefits": [
+        {
+          "benefitId": "checked_baggage",
+          "name": "托运行李",
+          "summary": "以航司实际规则为准",
+          "detail": "当前舱位权益信息不完整。",
+          "level": "basic",
+          "available": false,
+          "highlight": true,
+          "source": "mock"
+        },
+        {
+          "benefitId": "change_refund",
+          "name": "退改签",
+          "summary": "限制较多",
+          "detail": "特价舱位退改签限制较多，以航司实际规则为准。",
+          "level": "basic",
+          "available": true,
+          "highlight": true,
+          "source": "mock"
+        },
+        {
+          "benefitId": "seat_selection",
+          "name": "选座",
+          "summary": "不支持提前选座",
+          "detail": "以航司实际规则为准。",
+          "level": "basic",
+          "available": false,
+          "highlight": false,
+          "source": "mock"
+        }
+      ]
+    }
+  ]
+}

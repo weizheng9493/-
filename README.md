@@ -28,6 +28,26 @@
 7. **设计 QA** → `hanglv-frontend-qa-agent`
 8. **发布上线** → Release → 飞书通知
 
+## 快速 Demo 闭环
+
+当团队需要先跑通一个需求时，可以使用轻量闭环：
+
+```text
+Issue
+→ PRD 草稿
+→ UI 交付说明
+→ HTML 交互原型
+→ Figma MCP Capture
+→ Figma 链接回写 GitHub
+→ QA 验收报告
+→ Pull Request
+→ Review / Merge
+```
+
+详细说明见：
+
+- [Issue 到 UI/Figma/PR 的快速闭环工作流](docs/workflows/ISSUE_TO_UI_FIGMA_PR_WORKFLOW.md)
+
 ## 发布流程
 
 ```bash
