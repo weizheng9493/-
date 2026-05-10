@@ -1,0 +1,6 @@
+interface:
+  display_name: "航旅问题雷达 Agent"
+  short_description: "把客诉、评价、工单转成问题聚类和优先级"
+  default_prompt: "Use $hanglv-problem-radar-agent to turn Hanglv flight feedback or review data into a ProblemRadarReport."
+policy:
+  allow_implicit_invocation: true

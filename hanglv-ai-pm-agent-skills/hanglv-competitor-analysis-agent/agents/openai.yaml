@@ -1,0 +1,6 @@
+interface:
+  display_name: "航旅竞品分析 Agent"
+  short_description: "分析携程、去哪儿、飞猪等机票流程录屏并沉淀案例库"
+  default_prompt: "Use $hanglv-competitor-analysis-agent to analyze OTA flight-booking competitor recordings, screenshots, personas, purchase scenarios, and edge cases, then produce reusable competitor references for Hanglv."
+policy:
+  allow_implicit_invocation: true

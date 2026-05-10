@@ -1,0 +1,6 @@
+interface:
+  display_name: "航旅 AI PM 工作流"
+  short_description: "主路由调度问题雷达、诊断、PRD、设计、前端实现和验收"
+  default_prompt: "Use $hanglv-ai-pm-workflow to route a Hanglv flight-ticket PM task to the right specialized agent and coordinate problem, PRD, design, frontend implementation, and QA outputs."
+policy:
+  allow_implicit_invocation: true

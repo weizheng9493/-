@@ -1,0 +1,6 @@
+interface:
+  display_name: "航旅团队流程运营 Agent"
+  short_description: "管理飞书通知、状态流转、客诉文件触发和需求资产库"
+  default_prompt: "Use $hanglv-team-workflow-ops-agent to coordinate Feishu-based Hanglv AI PM workflow states, owners, notifications, artifact storage, and complaint-file triggers."
+policy:
+  allow_implicit_invocation: true

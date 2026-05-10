@@ -1,0 +1,6 @@
+interface:
+  display_name: "航旅 PRD Agent"
+  short_description: "把诊断问题转成方案卡、PRD、埋点和评审材料"
+  default_prompt: "Use $hanglv-prd-agent to create a SolutionCard and PRDDraft for a Hanglv flight-ticket requirement."
+policy:
+  allow_implicit_invocation: true

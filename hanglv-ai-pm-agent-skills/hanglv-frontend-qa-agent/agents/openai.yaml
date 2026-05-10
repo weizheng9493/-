@@ -1,0 +1,6 @@
+interface:
+  display_name: "航旅前端验收 Agent"
+  short_description: "对比 Figma/原型和前端实现，输出差异、修复建议和门禁"
+  default_prompt: "Use $hanglv-frontend-qa-agent to compare Hanglv designs and frontend implementation and produce a FrontendQAReport."
+policy:
+  allow_implicit_invocation: true

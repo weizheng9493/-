@@ -1,0 +1,6 @@
+interface:
+  display_name: "航旅前端实现 Agent"
+  short_description: "把 HTML/Figma/PRD 转成前端代码、测试、截图和 PR 草案"
+  default_prompt: "Use $hanglv-frontend-implementation-agent to convert a Hanglv DesignDeliveryPackage, HTML prototype, or Figma design into frontend code and a PR-ready implementation package."
+policy:
+  allow_implicit_invocation: true
