@@ -1,5 +1,7 @@
 # 航旅 AI PM 工作流
 
+> 航班预订智能助手产品研发团队协作仓库
+
 这个仓库用于把航旅 AI PM 的工作流、Agent Skills、提示词、文档、案例和团队成员提交的智能体产物，按产品化方式持续管理。
 
 ## 目标
@@ -7,23 +9,40 @@
 - 把工作流当成一个可迭代产品管理，而不是零散文档。
 - 所有正式变更必须通过 Pull Request 提交、说明更新点，并经过审核后合并。
 - 团队成员可以提交自己或智能体生成的 Markdown、代码、脚本、原型、分析材料等，但需要放入约定目录并补充来源、用途和风险说明。
-- 每次正式发布通过版本号和 `CHANGELOG.md` 记录，确保团队知道当前可用版本和变更范围。
+- 每次正式发布通过版本号、`CHANGELOG.md` 和 GitHub Release 记录，确保团队知道当前可用版本和变更范围。
 
-## 仓库结构
+## 目录结构
 
 ```text
-.
 ├── AGENTS.md                         # Codex / 智能体在本仓库工作的规则
 ├── CONTRIBUTING.md                   # 团队提交规范
 ├── CHANGELOG.md                      # 版本更新记录
 ├── docs/                             # 正式产品文档和流程说明
+│   ├── PRD/                          # 产品需求文档
+│   ├── design/                       # 设计交付物
+│   ├── research/                     # 调研报告
+│   ├── TEAM_COLLABORATION.md         # 团队协作规范
+│   └── releases/                     # 发布流程文档
 ├── workflows/                        # 工作流定义和操作流程
 ├── prompts/                          # 可复用提示词模板
 ├── artifacts/                        # 团队成员和智能体生成的待沉淀产物
 ├── examples/                         # 示例提交和样例材料
-├── .github/                          # PR、Issue、CODEOWNERS 等协作配置
-└── hanglv-ai-pm-agent-skills/         # 已有航旅 AI PM Agent Skills
+├── releases/                         # 版本发布包
+├── scripts/                          # 自动化脚本
+├── .github/                          # PR、Issue、CODEOWNERS、CI/CD 配置
+└── hanglv-ai-pm-agent-skills/         # 航旅 AI PM Agent Skills
 ```
+
+## 工作流
+
+1. **问题发现** → Issue 提出 → `hanglv-problem-radar-agent`
+2. **竞品分析** → `hanglv-competitor-analysis-agent`
+3. **问题诊断** → `hanglv-diagnosis-agent`
+4. **PRD 撰写** → `hanglv-prd-agent`
+5. **设计交付** → `hanglv-design-delivery-agent`
+6. **前端实现** → PR → `hanglv-frontend-implementation-agent`
+7. **设计 QA** → `hanglv-frontend-qa-agent`
+8. **发布上线** → Release → 飞书通知
 
 ## 团队协作规则
 
@@ -44,6 +63,7 @@
 | 智能体生成的 Markdown、代码、分析结果 | `artifacts/<提交人>/<日期-主题>/` |
 | 示例 | `examples/` |
 | Agent Skill | `hanglv-ai-pm-agent-skills/` |
+| 发布包 | `releases/` |
 
 ## 标准流程
 
@@ -69,6 +89,30 @@
 5. 填写 PR 模板。
 6. 等待审核。
 
-## 当前版本
+## 发布流程
 
-当前处于 `v0.1.0` 前的初始化阶段，主要目标是建立仓库治理、提交流程和团队协作规则。
+```bash
+# 1. 创建发布分支
+git checkout -b release/v1.0.0
+
+# 2. 更新版本号和 CHANGELOG
+# 3. 提交 PR → Review → Merge
+
+# 4. 打标签
+git tag -a v1.0.0 -m "feat: 航班搜索结果页优化"
+git push origin v1.0.0
+
+# 5. GitHub 自动生成 Release
+```
+
+## 团队成员
+
+- PM: @weizheng
+- 前端: @xxx
+- 设计: @xxx
+
+## 链接
+
+- [Wiki 知识库](https://github.com/weizheng9493/-/wiki)
+- [Projects 看板](https://github.com/weizheng9493/-/projects)
+- [Discussions 讨论区](https://github.com/weizheng9493/-/discussions)
