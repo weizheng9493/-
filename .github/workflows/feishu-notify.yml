@@ -1,0 +1,132 @@
+name: Feishu Notify
+
+on:
+  issues:
+    types: [opened, edited, closed, reopened]
+  pull_request:
+    types: [opened, reopened, ready_for_review, synchronize, closed]
+  pull_request_review:
+    types: [submitted]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Feishu notification
+        env:
+          FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          FEISHU_SECRET: ${{ secrets.FEISHU_SECRET }}
+          EVENT_NAME: ${{ github.event_name }}
+          ACTION: ${{ github.event.action }}
+          REPO: ${{ github.repository }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          node <<'NODE'
+          const crypto = require('crypto');
+          const fs = require('fs');
+
+          const webhook = process.env.FEISHU_WEBHOOK;
+          const secret = process.env.FEISHU_SECRET || '';
+          const eventName = process.env.EVENT_NAME;
+          const action = process.env.ACTION || 'manual';
+          const repo = process.env.REPO;
+          const actor = process.env.ACTOR;
+
+          if (!webhook) {
+            console.log('FEISHU_WEBHOOK is not set. Skip notification.');
+            process.exit(0);
+          }
+
+          const payload = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
+          const item = payload.pull_request || payload.issue || payload.release || {};
+          const title = item.title || item.name || `${eventName} ${action}`;
+          const url = item.html_url || `https://github.com/${repo}`;
+          const number = item.number ? `#${item.number}` : '';
+          const state = item.merged ? 'merged' : (item.state || '');
+
+          const reviewHints = [];
+          if (payload.pull_request) {
+            reviewHints.push('- 产品：确认需求范围、验收标准和是否允许合并');
+            reviewHints.push('- UI：确认 HTML 原型、Figma 链接、状态覆盖和视觉方向');
+            reviewHints.push('- 前端：确认数据结构、实现方案、接口承接和风险');
+            reviewHints.push('- QA：确认状态覆盖、校验脚本和阻塞项');
+          }
+          if (payload.issue && !payload.pull_request) {
+            reviewHints.push('- 产品：补充背景、目标、范围、验收标准和优先级');
+            reviewHints.push('- AI Agent：可基于 Issue 生成 PRD / 原型 / QA 草稿');
+          }
+          if (payload.release) {
+            reviewHints.push('- 全员：关注版本更新、影响范围和发布风险');
+          }
+
+          const timestamp = Math.floor(Date.now() / 1000).toString();
+          const body = {
+            msg_type: 'interactive',
+            card: {
+              config: {
+                wide_screen_mode: true
+              },
+              header: {
+                template: payload.pull_request ? 'blue' : payload.release ? 'green' : 'turquoise',
+                title: {
+                  tag: 'plain_text',
+                  content: `GitHub 更新：${eventName} / ${action}`
+                }
+              },
+              elements: [
+                {
+                  tag: 'div',
+                  text: {
+                    tag: 'lark_md',
+                    content:
+                      `**仓库**：${repo}\n` +
+                      `**标题**：${number} ${title}\n` +
+                      `**状态**：${state || '-'}\n` +
+                      `**操作人**：${actor}\n` +
+                      `**链接**：[点击查看](${url})`
+                  }
+                },
+                {
+                  tag: 'hr'
+                },
+                {
+                  tag: 'div',
+                  text: {
+                    tag: 'lark_md',
+                    content: `**建议处理**：\n${reviewHints.join('\n') || '- 请查看 GitHub 链接确认变更'}`
+                  }
+                }
+              ]
+            }
+          };
+
+          if (secret) {
+            const stringToSign = `${timestamp}\n${secret}`;
+            body.timestamp = timestamp;
+            body.sign = crypto
+              .createHmac('sha256', stringToSign)
+              .update('')
+              .digest('base64');
+          }
+
+          fetch(webhook, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+          }).then(async res => {
+            const text = await res.text();
+            if (!res.ok) {
+              console.error(text);
+              process.exit(1);
+            }
+            console.log(text);
+          });
+          NODE

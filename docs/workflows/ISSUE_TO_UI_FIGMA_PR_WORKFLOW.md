@@ -146,7 +146,34 @@ PR 需要说明：
 node artifacts/<提交人>/<YYYY-MM-DD-需求主题>/scripts/validate-*.mjs
 ```
 
-## 7. 当前示例
+## 7. 飞书通知
+
+GitHub 事件会通过 GitHub Actions 推送到飞书群机器人。
+
+当前监听事件：
+
+- Issue 创建、编辑、关闭、重新打开。
+- PR 创建、重新打开、ready for review、更新、关闭。
+- PR review 提交。
+- Release 发布。
+
+需要在 GitHub 仓库中配置 Actions Secrets：
+
+| Secret | 用途 |
+| --- | --- |
+| `FEISHU_WEBHOOK` | 飞书自定义机器人 Webhook 地址 |
+| `FEISHU_SECRET` | 飞书机器人签名密钥，可选但建议配置 |
+
+通知内容会包含：
+
+- 仓库。
+- Issue / PR / Release 标题。
+- 状态。
+- 操作人。
+- GitHub 链接。
+- 产品、UI、前端、QA 的建议处理项。
+
+## 8. 当前示例
 
 示例需求：
 
@@ -160,7 +187,7 @@ node artifacts/<提交人>/<YYYY-MM-DD-需求主题>/scripts/validate-*.mjs
 
 - https://www.figma.com/design/loxVuPKMBrzo2EW0XLPChk
 
-## 8. 优势
+## 9. 优势
 
 - 产品、UI、研发不用等待完整真实系统，即可先对齐方案。
 - 所有产物进入 GitHub，可追踪、可审核、可复用。
@@ -168,7 +195,7 @@ node artifacts/<提交人>/<YYYY-MM-DD-需求主题>/scripts/validate-*.mjs
 - QA 可以提前检查状态覆盖。
 - PR 形成正式审核入口。
 
-## 9. 风险
+## 10. 风险
 
 - 假数据可能和真实接口不一致。
 - HTML 原型可能偏离正式设计系统。
@@ -176,7 +203,7 @@ node artifacts/<提交人>/<YYYY-MM-DD-需求主题>/scripts/validate-*.mjs
 - 如果 Issue 写得不清楚，AI 生成产物会跑偏。
 - 如果没有人工审核，AI 产物可能被误当成正式规范。
 
-## 10. 最小可执行版本
+## 11. 最小可执行版本
 
 如果只想快速跑通，至少需要：
 
