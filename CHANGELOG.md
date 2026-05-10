@@ -11,6 +11,7 @@
 - 新增 `docs/workflows/ISSUE_TO_UI_FIGMA_PR_WORKFLOW.md`，沉淀 Issue → PRD → UI → HTML 原型 → Figma MCP Capture → PR 的快速闭环流程。
 - 在 `README.md` 增加快速 Demo 闭环说明，明确 Figma 链接回写 GitHub 的协作方式。
 - 基于 Issue #2 和 PR #3 验证舱位选择页权益展示 Demo 的产品、UI、研发、QA 协作流程。
+- 新增 `.github/workflows/feishu-notify.yml`，支持 GitHub Issue、PR、Review、Release 更新时通过飞书群机器人通知团队。
 
 ## [1.0.0] - 2026-05-10
 
