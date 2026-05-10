@@ -31,6 +31,22 @@
 | `qa-report.md` | QA 验收报告 |
 | `data/cabin-benefits.mock.json` | 假数据 |
 | `scripts/validate-cabin-benefits.mjs` | 假数据校验脚本 |
+| `prototype/index.html` | 可交互 HTML 原型 |
+
+## 原型查看方式
+
+直接用浏览器打开：
+
+```text
+prototype/index.html
+```
+
+原型支持：
+
+- 点击舱位卡片展开/收起权益。
+- 切换选中舱位。
+- 展示不可选舱位和不可选原因。
+- 底部确认条承接已选舱位。
 
 ## 人工校验状态
 

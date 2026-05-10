@@ -14,6 +14,7 @@
 | 假数据是否覆盖 3 个舱位 | 通过 | 经济舱标准、经济舱灵活、商务舱尊享、经济舱特价 |
 | 是否有不可选状态 | 通过 | 经济舱特价为不可选 |
 | 是否有校验脚本 | 通过 | `validate-cabin-benefits.mjs` |
+| 是否有可交互 UI 原型 | 通过 | `prototype/index.html` |
 
 ## 3. 校验命令
 
@@ -24,6 +25,8 @@ node artifacts/weizheng/2026-05-10-cabin-benefits-demo/scripts/validate-cabin-be
 ## 4. 当前结论
 
 Demo 产物可以用于跑通 GitHub Issue → 产品 PRD → UI 交付 → 研发计划 → QA 验收 → PR 审核流程。
+
+HTML 原型已经补充，可用于更接近真实协作地评审 UI 状态和交互承接。
 
 ## 5. 阻塞项
 

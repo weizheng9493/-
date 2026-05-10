@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>舱位选择页权益展示 Demo</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #ffffff;
+      --ink: #182033;
+      --muted: #667085;
+      --line: #dde4ef;
+      --primary: #1769ff;
+      --primary-weak: #eaf1ff;
+      --success: #0f8f61;
+      --warning: #b76a00;
+      --danger: #b42318;
+      --shadow: 0 18px 48px rgba(28, 45, 74, 0.12);
+      --radius: 8px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(180deg, #dceaff 0, #f5f7fb 220px),
+        var(--bg);
+      color: var(--ink);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(100%, 430px);
+      min-height: 100vh;
+      margin: 0 auto;
+      background: var(--bg);
+      position: relative;
+      box-shadow: 0 0 0 1px rgba(24, 32, 51, 0.06);
+      padding-bottom: 96px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      background: rgba(245, 247, 251, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(221, 228, 239, 0.72);
+    }
+
+    .back {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 8px;
+      background: #eef3fb;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .topbar h1 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    .flight-card {
+      margin: 12px 14px 10px;
+      padding: 16px;
+      background: #0d2a57;
+      color: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .route {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .city {
+      min-width: 0;
+    }
+
+    .city strong {
+      display: block;
+      font-size: 20px;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .city span {
+      display: block;
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.72);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .plane-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 12px;
+    }
+
+    .plane-line::before,
+    .plane-line::after {
+      content: "";
+      width: 24px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.42);
+    }
+
+    .flight-meta {
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.82);
+      font-size: 12px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      padding: 12px 16px 8px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .section-head span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .cabins {
+      display: grid;
+      gap: 10px;
+      padding: 0 14px;
+    }
+
+    .cabin-card {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      overflow: hidden;
+      transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+    }
+
+    .cabin-card.is-selected {
+      border-color: var(--primary);
+      box-shadow: 0 12px 28px rgba(23, 105, 255, 0.16);
+    }
+
+    .cabin-card.is-unavailable {
+      opacity: 0.78;
+      background: #fbfcfe;
+    }
+
+    .cabin-main {
+      padding: 14px;
+      cursor: pointer;
+    }
+
+    .cabin-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: start;
+    }
+
+    .name-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .name-row h3 {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      height: 20px;
+      padding: 0 7px;
+      border-radius: 6px;
+      background: var(--primary-weak);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .tag.is-premium {
+      background: #fff4d6;
+      color: #8a5300;
+    }
+
+    .tag.is-disabled {
+      background: #eef0f4;
+      color: #7a8494;
+    }
+
+    .price {
+      text-align: right;
+      color: #e5482f;
+      white-space: nowrap;
+    }
+
+    .price small {
+      font-size: 12px;
+    }
+
+    .price strong {
+      font-size: 22px;
+      letter-spacing: 0;
+    }
+
+    .summary {
+      margin: 10px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 7px;
+      list-style: none;
+    }
+
+    .summary li,
+    .benefit-row {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 7px;
+      align-items: start;
+      color: #344054;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #e9f7f1;
+      color: var(--success);
+      display: inline-grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .dot.is-off {
+      background: #f1f3f6;
+      color: #98a2b3;
+    }
+
+    .detail-toggle {
+      margin-top: 12px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .benefit-detail {
+      display: none;
+      border-top: 1px solid var(--line);
+      padding: 12px 14px 14px;
+      background: #fbfdff;
+    }
+
+    .cabin-card.is-expanded .benefit-detail {
+      display: grid;
+      gap: 10px;
+    }
+
+    .benefit-row strong {
+      display: block;
+      color: var(--ink);
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .benefit-row span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .unavailable {
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 7px;
+      background: #fff3f0;
+      color: var(--danger);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      margin-top: 13px;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .select-btn {
+      height: 36px;
+      min-width: 84px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .select-btn:disabled {
+      background: #d0d5dd;
+      color: #667085;
+      cursor: not-allowed;
+    }
+
+    .select-btn.is-selected {
+      background: #0f8f61;
+    }
+
+    .bottom-bar {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: min(100%, 430px);
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--line);
+      box-shadow: 0 -12px 32px rgba(28, 45, 74, 0.12);
+    }
+
+    .bar-inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .selected-title {
+      margin: 0;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.25;
+    }
+
+    .selected-name {
+      margin: 3px 0 0;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .confirm {
+      height: 42px;
+      min-width: 116px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 78px;
+      transform: translateX(-50%) translateY(12px);
+      width: min(calc(100% - 32px), 398px);
+      padding: 12px 14px;
+      border-radius: 8px;
+      background: rgba(24, 32, 51, 0.92);
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.45;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (min-width: 720px) {
+      body {
+        padding: 28px 0;
+      }
+
+      .shell {
+        min-height: calc(100vh - 56px);
+        border-radius: 18px;
+        overflow: hidden;
+      }
+
+      .bottom-bar {
+        border-radius: 0 0 18px 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <button class="back" type="button" aria-label="返回">‹</button>
+      <h1>选择舱位</h1>
+    </header>
+
+    <section class="flight-card" aria-label="航班信息">
+      <div class="route">
+        <div class="city">
+          <strong>北京</strong>
+          <span>首都 T3 · 08:30</span>
+        </div>
+        <div class="plane-line">CA1234</div>
+        <div class="city" style="text-align:right">
+          <strong>上海</strong>
+          <span>虹桥 T2 · 10:45</span>
+        </div>
+      </div>
+      <div class="flight-meta">
+        <span>2026-05-12 周二</span>
+        <span>权益信息为 Demo 假数据</span>
+      </div>
+    </section>
+
+    <div class="section-head">
+      <h2>舱位权益</h2>
+      <span>点击卡片可展开权益</span>
+    </div>
+
+    <section class="cabins" id="cabins" aria-label="舱位列表"></section>
+  </main>
+
+  <aside class="bottom-bar" aria-label="已选舱位">
+    <div class="bar-inner">
+      <div>
+        <p class="selected-title">当前选择</p>
+        <p class="selected-name" id="selectedName">经济舱灵活 · ¥1280</p>
+      </div>
+      <button class="confirm" id="confirmBtn" type="button">确认舱位</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const data = {
+      cabins: [
+        {
+          cabinId: "economy_standard",
+          name: "经济舱标准",
+          tag: "基础",
+          price: 980,
+          currency: "CNY",
+          sortOrder: 1,
+          selectable: true,
+          benefits: [
+            { benefitId: "checked_baggage", name: "托运行李", summary: "20kg 免费托运", detail: "每位成人旅客可免费托运 20kg 行李。", available: true, highlight: true },
+            { benefitId: "change_refund", name: "退改签", summary: "按航司标准规则收取手续费", detail: "具体退改签费用以航司实际规则为准。", available: true, highlight: true },
+            { benefitId: "seat_selection", name: "选座", summary: "值机开放后可选座", detail: "可在值机开放后选择普通座位。", available: true, highlight: false }
+          ]
+        },
+        {
+          cabinId: "economy_flex",
+          name: "经济舱灵活",
+          tag: "推荐",
+          price: 1280,
+          currency: "CNY",
+          sortOrder: 2,
+          selectable: true,
+          benefits: [
+            { benefitId: "checked_baggage", name: "托运行李", summary: "25kg 免费托运", detail: "每位成人旅客可免费托运 25kg 行李。", available: true, highlight: true },
+            { benefitId: "change_refund", name: "退改签", summary: "改签手续费更低", detail: "航班起飞前改签手续费低于标准经济舱。", available: true, highlight: true },
+            { benefitId: "seat_selection", name: "选座", summary: "提前选择普通座位", detail: "购票后可提前选择普通座位。", available: true, highlight: true },
+            { benefitId: "priority_checkin", name: "优先值机", summary: "部分机场支持优先值机", detail: "以机场和航司实际服务为准。", available: true, highlight: false }
+          ]
+        },
+        {
+          cabinId: "business_premium",
+          name: "商务舱尊享",
+          tag: "高权益",
+          price: 3280,
+          currency: "CNY",
+          sortOrder: 3,
+          selectable: true,
+          benefits: [
+            { benefitId: "checked_baggage", name: "托运行李", summary: "40kg 免费托运", detail: "每位成人旅客可免费托运 40kg 行李。", available: true, highlight: true },
+            { benefitId: "lounge", name: "休息室", summary: "可使用商务休息室", detail: "以机场和航司实际开放情况为准。", available: true, highlight: true },
+            { benefitId: "priority_boarding", name: "优先登机", summary: "支持优先登机", detail: "登机时可使用优先通道。", available: true, highlight: true },
+            { benefitId: "meal", name: "餐食", summary: "商务舱餐食", detail: "餐食以航司实际供应为准。", available: true, highlight: false }
+          ]
+        },
+        {
+          cabinId: "economy_discount",
+          name: "经济舱特价",
+          tag: "售罄",
+          price: 720,
+          currency: "CNY",
+          sortOrder: 4,
+          selectable: false,
+          unavailableReason: "当前舱位余票不足",
+          benefits: [
+            { benefitId: "checked_baggage", name: "托运行李", summary: "以航司实际规则为准", detail: "当前舱位权益信息不完整。", available: false, highlight: true },
+            { benefitId: "change_refund", name: "退改签", summary: "限制较多", detail: "特价舱位退改签限制较多，以航司实际规则为准。", available: true, highlight: true },
+            { benefitId: "seat_selection", name: "选座", summary: "不支持提前选座", detail: "以航司实际规则为准。", available: false, highlight: false }
+          ]
+        }
+      ]
+    };
+
+    const cabinsEl = document.querySelector("#cabins");
+    const selectedNameEl = document.querySelector("#selectedName");
+    const confirmBtn = document.querySelector("#confirmBtn");
+    const toast = document.querySelector("#toast");
+    let selectedCabinId = "economy_flex";
+    let expandedCabinId = "economy_flex";
+    let toastTimer;
+
+    function formatPrice(cabin) {
+      return `¥${cabin.price}`;
+    }
+
+    function tagClass(cabin) {
+      if (!cabin.selectable) return "is-disabled";
+      if (cabin.cabinId === "business_premium") return "is-premium";
+      return "";
+    }
+
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.add("is-visible");
+      toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 1800);
+    }
+
+    function render() {
+      const cabins = [...data.cabins].sort((a, b) => a.sortOrder - b.sortOrder);
+      cabinsEl.innerHTML = cabins.map(cabin => {
+        const isSelected = cabin.cabinId === selectedCabinId;
+        const isExpanded = cabin.cabinId === expandedCabinId;
+        const summary = cabin.benefits.slice(0, 3);
+
+        return `
+          <article class="cabin-card ${isSelected ? "is-selected" : ""} ${isExpanded ? "is-expanded" : ""} ${!cabin.selectable ? "is-unavailable" : ""}" data-cabin-id="${cabin.cabinId}">
+            <div class="cabin-main" role="button" tabindex="0" aria-expanded="${isExpanded}">
+              <div class="cabin-top">
+                <div>
+                  <div class="name-row">
+                    <h3>${cabin.name}</h3>
+                    <span class="tag ${tagClass(cabin)}">${cabin.tag}</span>
+                  </div>
+                </div>
+                <div class="price"><small>¥</small><strong>${cabin.price}</strong></div>
+              </div>
+              <ul class="summary">
+                ${summary.map(benefit => `
+                  <li>
+                    <span class="dot ${benefit.available ? "" : "is-off"}">${benefit.available ? "✓" : "−"}</span>
+                    <span>${benefit.name}：${benefit.summary || "以航司实际规则为准"}</span>
+                  </li>
+                `).join("")}
+              </ul>
+              ${!cabin.selectable ? `<div class="unavailable">${cabin.unavailableReason}</div>` : ""}
+              <div class="action-row">
+                <button class="detail-toggle" type="button">${isExpanded ? "收起全部权益" : "查看全部权益"}</button>
+                <button class="select-btn ${isSelected ? "is-selected" : ""}" type="button" ${cabin.selectable ? "" : "disabled"}>
+                  ${!cabin.selectable ? "不可选" : isSelected ? "已选择" : "选择"}
+                </button>
+              </div>
+            </div>
+            <div class="benefit-detail">
+              ${cabin.benefits.map(benefit => `
+                <div class="benefit-row">
+                  <span class="dot ${benefit.available ? "" : "is-off"}">${benefit.available ? "✓" : "−"}</span>
+                  <span>
+                    <strong>${benefit.name}：${benefit.summary || "以航司实际规则为准"}</strong>
+                    <span>${benefit.detail || "以航司实际规则为准"}</span>
+                  </span>
+                </div>
+              `).join("")}
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      const selected = data.cabins.find(cabin => cabin.cabinId === selectedCabinId);
+      selectedNameEl.textContent = selected ? `${selected.name} · ${formatPrice(selected)}` : "请选择舱位";
+    }
+
+    cabinsEl.addEventListener("click", event => {
+      const card = event.target.closest(".cabin-card");
+      if (!card) return;
+
+      const cabin = data.cabins.find(item => item.cabinId === card.dataset.cabinId);
+      if (!cabin) return;
+
+      if (event.target.closest(".select-btn")) {
+        if (!cabin.selectable) return;
+        selectedCabinId = cabin.cabinId;
+        expandedCabinId = cabin.cabinId;
+        render();
+        showToast(`已选择 ${cabin.name}，核心权益会在底部确认区承接。`);
+        return;
+      }
+
+      expandedCabinId = expandedCabinId === cabin.cabinId ? "" : cabin.cabinId;
+      render();
+    });
+
+    confirmBtn.addEventListener("click", () => {
+      const selected = data.cabins.find(cabin => cabin.cabinId === selectedCabinId);
+      showToast(`${selected.name} 已确认。真实流程中会进入订单填写页。`);
+    });
+
+    render();
+  </script>
+</body>
+</html>
